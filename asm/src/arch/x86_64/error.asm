@@ -17,5 +17,5 @@ error:
   mov dword [0xb8008], 0x4f204f20 ; " " then " " (little endian) - white text, red background
   ;; Write `al` to the byte right after the first space shown.
   ;; The other space is still red and white, making this byte red and white.
-  mov byte  [0xb800a], al
+  mov  byte [0xb800a], al
   hlt                           ; Halt the CPU

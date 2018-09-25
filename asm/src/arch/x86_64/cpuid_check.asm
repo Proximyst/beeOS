@@ -1,3 +1,5 @@
+%include "error_codes.asm"
+
   global check_cpuid
 
   section .text
@@ -34,6 +36,6 @@ check_cpuid:
   ;;   LINKS:
   ;; `error.asm` for `error`
 .cpuid_absent:
-  mov al, "1"                   ; Move error "1" to `al`
+  mov al, error_code_no_cpuid   ; Move the error code to `al`
   extern error                  ; Declare `error` for linking to `error.asm`
   jmp error                     ; Jump to `error` for halting

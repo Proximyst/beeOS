@@ -25,7 +25,7 @@ $(build_dir):
 
 $(build_dir)/%.o: $(src_dir)/%.asm
 	mkdir -p $(build_dir)
-	nasm -felf64 $< -o $@
+	nasm -i$(src_dir)/ -felf64 $< -o $@
 
 $(rust_interface):
 

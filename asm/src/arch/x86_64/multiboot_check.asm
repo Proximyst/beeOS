@@ -1,3 +1,5 @@
+%include "error_codes.asm"
+
   global check_multiboot
 
   section .text
@@ -21,6 +23,6 @@ check_multiboot:
   ;;   LINKS:
   ;; `error.asm` for `error`
 .multiboot_absent:
-  mov al, "0"                   ; Move error "0" to `al`
+  mov al, error_code_no_multiboot ; Move the error code to `al`
   extern error                  ; Declare `error` for linking to `error.asm`
   jmp error                     ; Jump to `error` for halting

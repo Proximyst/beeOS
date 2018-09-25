@@ -1,3 +1,5 @@
+%include "error_codes.asm"
+
   global check_long_mode
 
   section .text
@@ -28,6 +30,6 @@ check_long_mode:
   ;;   LINKS:
   ;; `error.asm` for `error`
 .long_mode_absent:
-  mov al, "2"                   ; Move error "2" to `al`
+  mov al, error_code_no_longmode; Move the error code to `al`
   extern error                  ; Declare `error` for linking to `error.asm`
   jmp error                     ; Jump to `error` for halting
