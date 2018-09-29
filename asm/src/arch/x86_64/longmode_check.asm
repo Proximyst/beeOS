@@ -30,6 +30,4 @@ check_long_mode:
   ;;   LINKS:
   ;; `error.asm` for `error`
 .long_mode_absent:
-  mov al, error_code_no_longmode; Move the error code to `al`
-  extern error                  ; Declare `error` for linking to `error.asm`
-  jmp error                     ; Jump to `error` for halting
+  CALL_ERROR(ERROR_CODE_NO_LONGMODE)
