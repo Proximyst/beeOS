@@ -19,6 +19,7 @@ Glad you asked! First, you need some tools:
  - make
  - grub-mkrescue (bundled with GRUB2)
  - probably an x86_64 system to compile on, that's what I used
+ - either xorriso or libiso to use with grub-mkrescue
 
 How:
 
