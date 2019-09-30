@@ -3,8 +3,8 @@
 
 #[macro_use]
 extern crate lazy_static;
-extern crate volatile;
 extern crate spin;
+extern crate volatile;
 extern crate x86_64;
 
 use core::panic::PanicInfo;
@@ -16,17 +16,14 @@ pub use self::vga::STD_OUT;
 pub mod cmos;
 pub mod portio;
 
-mod cpu_exceptions;
 mod bee_movie;
+mod cpu_exceptions;
 
 pub const VERSION: &str = "1.0.0";
 
-fn smallest(first: usize, second: usize) -> usize {
-    if first > second {
-        second
-    } else {
-        first
-    }
+/// Get the smallest of two ordered values.
+fn smallest<T: core::cmp::PartialOrd>(first: T, second: T) -> T {
+    if first > second { second } else { first }
 }
 
 #[no_mangle]
@@ -41,7 +38,8 @@ pub extern "C" fn rust_main() -> ! {
             read = 0;
             writer.clear_screen();
         }
-        let write = &bee_movie::SCRIPT.as_bytes()[read..smallest(movie_len, read + vga::BUFFER_WIDTH)];
+        let write = &bee_movie::SCRIPT.as_bytes()
+            [read..smallest(movie_len, read + vga::BUFFER_WIDTH)];
         for ref c in write.iter() {
             writer.write(**c);
         }
@@ -68,8 +66,32 @@ pub extern "C" fn rust_main() -> ! {
 
 #[panic_handler]
 #[no_mangle]
+#[allow(unreachable_code)]
 pub fn panic(info: &PanicInfo) -> ! {
+    // uh oh, the kernel panicked for any reason.
+    // this must be handled in a proper way such that a developer can figure out
+    // what to do.
+
     println!();
-    println!("beeOS has panicked. Please search this issue on GitHub, and report if needed!\n{}", info);
+    println!(
+        "beeOS has panicked. Please search this issue on GitHub, and report \
+         if needed!\n{}",
+        info
+    );
+
+    // now start looping
+    loop {}
+
+    // and asm version just to be entirely safe:
+    unsafe {
+        asm!(
+            "loop:
+            jmp loop
+            hlt"
+            :::: "volatile"
+        );
+    }
+
+    // to handle the !
     loop {}
 }
