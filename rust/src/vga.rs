@@ -1,9 +1,12 @@
-use ::volatile::Volatile;
-use ::core::fmt;
-use ::spin::Mutex;
+use core::fmt;
+use spin::Mutex;
+use volatile::Volatile;
 
 lazy_static! {
-    pub static ref STD_OUT: Mutex<Writer> = Mutex::new(Writer::new(unsafe { &mut *(0xb8000 as *mut Buffer) }, ColourCode::new(Colour::Yellow, Colour::Black)));
+    pub static ref STD_OUT: Mutex<Writer> = Mutex::new(Writer::new(
+        unsafe { &mut *(0xb8000 as *mut Buffer) },
+        ColourCode::new(Colour::Yellow, Colour::Black),
+    ));
 }
 
 // Print macros are taken straight from stdlib.
@@ -53,23 +56,23 @@ impl Colour {
     pub fn from_u8(n: u8) -> Option<Colour> {
         use self::Colour::*;
         match n {
-            0  => Some(Black),
-            1  => Some(DarkBlue),
-            2  => Some(DarkGreen),
-            3  => Some(DarkCyan),
-            4  => Some(DarkRed),
-            5  => Some(Purple),
-            6  => Some(Brown),
-            7  => Some(LightGrey),
-            8  => Some(DarkGrey),
-            9  => Some(LightBlue),
+            0 => Some(Black),
+            1 => Some(DarkBlue),
+            2 => Some(DarkGreen),
+            3 => Some(DarkCyan),
+            4 => Some(DarkRed),
+            5 => Some(Purple),
+            6 => Some(Brown),
+            7 => Some(LightGrey),
+            8 => Some(DarkGrey),
+            9 => Some(LightBlue),
             10 => Some(LightGreen),
             11 => Some(LightCyan),
             12 => Some(LightRed),
             13 => Some(Pink),
             14 => Some(Yellow),
             15 => Some(White),
-            _  => None,
+            _ => None,
         }
     }
 }
@@ -126,7 +129,7 @@ impl Writer {
     pub fn write(&mut self, byte: u8) {
         if byte == b'\n' {
             self.new_line();
-            return
+            return;
         }
         if self.column_pos >= BUFFER_WIDTH {
             self.new_line();
@@ -151,7 +154,7 @@ impl Writer {
         if self.row < BUFFER_HEIGHT - 1 {
             self.row += 1;
             self.column_pos = 0;
-            return
+            return;
         }
         for row in 1..BUFFER_HEIGHT {
             for col in 0..BUFFER_WIDTH {
