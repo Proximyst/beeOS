@@ -1,4 +1,4 @@
-use ::x86_64::structures::idt::{ExceptionStackFrame, InterruptDescriptorTable};
+use ::x86_64::structures::idt::{InterruptStackFrame, InterruptDescriptorTable};
 
 lazy_static! {
     pub static ref IDT: InterruptDescriptorTable = {
@@ -8,7 +8,7 @@ lazy_static! {
     };
 }
 
-extern "x86-interrupt" fn double_fault(stack: &mut ExceptionStackFrame, err: u64) {
+extern "x86-interrupt" fn double_fault(stack: &mut InterruptStackFrame, err: u64) {
     println!("CPU EXCEPTION ({}): DOUBLE FAULT", err);
     panic!("{:#?}", stack);
 }

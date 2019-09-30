@@ -14,19 +14,18 @@ Now you have the possibility to.
 Glad you asked! First, you need some tools:
 
  - nasm
- - nightly rust (the one as of September 24th 2018 works fine)
+ - nightly rust (the one as of September 30th 2019 works fine)
  - xargo (cargo install xargo)
  - make
  - grub-mkrescue (bundled with GRUB2)
+ - GNU/mtools
  - probably an x86_64 system to compile on, that's what I used
  - either xorriso or libiso to use with grub-mkrescue
 
 How:
 
 ```bash
-$ cd rust/beeos/
-$ RUST_TARGET_PATH=$(pwd) xargo build --release --target x86_64-beeos
-$ cd ../../asm
+$ cd asm
 $ make build
 # want to run it with qemu-system-x86_64?
 $ make run
