@@ -1,5 +1,5 @@
 #![no_std]
-#![feature(panic_implementation, abi_x86_interrupt, asm)]
+#![feature(abi_x86_interrupt, asm)]
 
 #[macro_use]
 extern crate lazy_static;

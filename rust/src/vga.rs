@@ -141,7 +141,7 @@ impl Writer {
     pub fn write_string(&mut self, s: &str) {
         for b in s.bytes() {
             match b {
-                0x20...0x7e | b'\n' => self.write(b),
+                0x20..=0x7e | b'\n' => self.write(b),
                 _ => self.write(0xfe),
             }
         }

@@ -7,7 +7,7 @@ asm_src := $(wildcard $(src_dir)/*.asm)
 asm_obj := $(patsubst $(src_dir)/%.asm, $(build_dir)/%.o, $(asm_src))
 kernel := $(build_dir)/iso/boot/kernel.bin
 linker := $(src_dir)/link.ld
-rust_interface := ../rust/beeos/target/$(arch)-beeos/release/libbeeos.a
+rust_interface := ../rust/target/$(arch)-beeos/release/libbeeos.a
 iso := $(build_dir)/beeOS-$(arch).iso
 
 .PHONY: build
@@ -27,13 +27,15 @@ $(build_dir)/%.o: $(src_dir)/%.asm
 	mkdir -p $(build_dir)
 	nasm -i$(src_dir)/ -felf64 $< -o $@
 
-$(rust_interface):
+$(rust_interface): $(wildcard ../rust/beeos/src/*.rs)
+	cd ../rust && ./build.sh
+
+rust_interface: $(rust_interface)
 
 .PHONY: kernel
 kernel: $(kernel)
 
-$(kernel): $(rust_interface) $(build_dir) $(asm_obj) $(linker) $(wildcard ../rust/beeos/src/*.rs)
-	cd ../rust/beeos && RUST_TARGET_PATH=./ xargo build --release --target x86_64-beeos
+$(kernel): $(rust_interface) $(build_dir) $(asm_obj) $(linker)
 	$(LD) -n -o $(kernel) -T $(linker) $(asm_obj) $(rust_interface)
 
 .PHONY: iso
